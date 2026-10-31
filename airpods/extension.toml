@@ -1,0 +1,37 @@
+# AirPods in the panel: their charge, noise control and Conversation
+# Awareness. See README.md at the top of this repository.
+
+title = "AirPods"
+description = "The charge of your AirPods, their noise control and Conversation Awareness, in the panel."
+version = "0.1.0"
+icon = "images/airpods.svg"
+
+background = "Background.qml"
+
+[panel_items]
+right = ["airpods"]
+
+[settings]
+# Devices whose name holds one of these are taken for AirPods.
+names = ["AirPods"]
+# How loud the sound stays while you talk, as a share of what it was.
+speaking_loudness = 0.2
+# Made-up AirPods, for trying the extension without any.
+pretend = false
+
+[settings_labels]
+pretend = "Show made-up AirPods (for trying it without any)"
+
+[words]
+connected = "Connected"
+battery = "Battery Level:"
+left = "Left"
+right = "Right"
+case = "Case"
+noise_control = "Noise Control:"
+off = "Off"
+transparency = "Transparency"
+adaptive = "Adaptive"
+noise_cancellation = "Noise Cancellation"
+awareness = "Conversation Awareness"
+disconnect = "Disconnect"

@@ -1,0 +1,22 @@
+# On pushes to main and on pull requests: runs the tests and checks the
+# Python code with ruff.
+
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Test
+        run: python3 -m unittest discover tests
+      - name: Ruff
+        run: pipx run ruff check .

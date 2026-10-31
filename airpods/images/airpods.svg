@@ -1,0 +1,26 @@
+<!-- A pair of AirPods Pro for the panel, in one colour: each earbud's
+     body with its grille, the ear tip set off from it by a gap, and the
+     stem. The second earbud is the first, mirrored and moved down. Drawn
+     for Mavernix; the gaps are wide enough to stay open at 32 pixels. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <!-- What is cut out of the body and stem: the gap around the ear tip, and the grille. -->
+    <mask id="cuts" maskUnits="userSpaceOnUse" x="-40" y="-40" width="120" height="120">
+      <rect x="-40" y="-40" width="120" height="120" fill="#fff"/>
+      <ellipse cx="6" cy="6.6" rx="6" ry="6.8" fill="#000"/>
+      <rect x="12.2" y="4.9" width="5.4" height="3.2" rx="1.6" fill="#000"/>
+    </mask>
+    <!-- One earbud, its ear tip to the left. -->
+    <g id="earbud">
+      <g mask="url(#cuts)">
+        <ellipse cx="13.4" cy="6.4" rx="7.6" ry="6.4"/>
+        <path d="M11.6 10.8 L4.4 18.4" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <ellipse cx="6" cy="6.6" rx="3.7" ry="4.4"/>
+    </g>
+  </defs>
+  <g transform="translate(1.6 0.8) scale(0.9)">
+    <use href="#earbud"/>
+    <use href="#earbud" transform="translate(32 13.2) scale(-1 1)"/>
+  </g>
+</svg>
