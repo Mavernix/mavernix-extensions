@@ -84,5 +84,16 @@ class Writing(unittest.TestCase):
             self.assertIsNotNone(airpods.read_message(message), line)
 
 
+class Input(unittest.TestCase):
+    def test_two_lines_in_one_chunk_both_come_out(self):
+        self.assertEqual(airpods.split_lines(b"", b"mode off\nawareness on\n"),
+                         (["mode off", "awareness on"], b""))
+
+    def test_a_line_cut_in_two_waits_for_its_end(self):
+        lines, rest = airpods.split_lines(b"", b"mode tran")
+        self.assertEqual((lines, rest), ([], b"mode tran"))
+        self.assertEqual(airpods.split_lines(rest, b"sparency\n"), (["mode transparency"], b""))
+
+
 if __name__ == "__main__":
     unittest.main()

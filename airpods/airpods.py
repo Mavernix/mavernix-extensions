@@ -28,6 +28,7 @@ Only Python's own library, and no more rights than any program has.
 """
 
 import json
+import os
 import select
 import socket
 import sys
@@ -148,6 +149,14 @@ def say(event):
     print(json.dumps(event), flush=True)
 
 
+def split_lines(pending, chunk):
+    """The whole lines in what was left over plus a new chunk of input, and
+    what is left over now. Input is read by the chunk, not with readline(),
+    which would keep lines the select() below can no longer see."""
+    *lines, rest = (pending + chunk).split(b"\n")
+    return [line.decode(errors="replace") for line in lines], rest
+
+
 def talk(address):
     """Connects to the AirPods and passes messages both ways until either
     side ends. Only to be started while the AirPods are connected for
@@ -172,31 +181,35 @@ def talk(address):
     # Sometimes the first request goes unanswered; it is asked once more
     # if nothing has come after two seconds.
     asked_again = False
-    while True:
-        ready, _, _ = select.select([link, sys.stdin], [], [], None if asked_again else 2)
-        if not ready and not asked_again:
-            link.send(REQUEST_NOTIFICATIONS)
-            asked_again = True
-            continue
-        if link in ready:
-            asked_again = True
-            try:
+    pending = b""
+    stdin = sys.stdin.fileno()
+    try:
+        while True:
+            ready, _, _ = select.select([link, stdin], [], [], None if asked_again else 2)
+            if not ready and not asked_again:
+                link.send(REQUEST_NOTIFICATIONS)
+                asked_again = True
+                continue
+            if link in ready:
+                asked_again = True
                 message = link.recv(1024)
-            except OSError as error:
-                say({"event": "failed", "reason": f"the connection to {address} ended: {error}"})
-                return 1
-            if not message:
-                say({"event": "failed", "reason": f"{address} closed the connection"})
-                return 1
-            event = read_message(message)
-            if event is not None:
-                say(event)
-        if sys.stdin in ready:
-            line = sys.stdin.readline()
-            if not line:
-                return 0
-            for message in messages_for(line):
-                link.send(message)
+                if not message:
+                    say({"event": "failed", "reason": f"{address} closed the connection"})
+                    return 1
+                event = read_message(message)
+                if event is not None:
+                    say(event)
+            if stdin in ready:
+                chunk = os.read(stdin, 4096)
+                if not chunk:
+                    return 0
+                lines, pending = split_lines(pending, chunk)
+                for line in lines:
+                    for message in messages_for(line):
+                        link.send(message)
+    except OSError as error:
+        say({"event": "failed", "reason": f"the connection to {address} ended: {error}"})
+        return 1
 
 
 def pretend():

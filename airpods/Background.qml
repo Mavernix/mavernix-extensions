@@ -64,6 +64,8 @@ Scope {
             return
         }
         if (said.event === "battery") {
+            // The AirPods answered, so the next failure starts over at the short wait.
+            retryWait = firstRetryWait
             left = said.left
             right = said.right
             chargingCase = said.case
@@ -105,21 +107,28 @@ Scope {
         onExited: {
             airpods.forget()
             if (airpods.connected) {
+                tryAgain.interval = retryWait
                 tryAgain.start()
+                retryWait = Math.min(retryWait * 2, longestRetryWait)
             }
         }
     }
 
     // The channel can drop while the sound stays connected, after the
-    // computer has slept, for one; then the helper starts over.
+    // computer has slept, for one; then the helper starts over. A pair that
+    // keeps refusing is asked less and less often.
+    readonly property int firstRetryWait: 5000
+    readonly property int longestRetryWait: 300000
+    property int retryWait: firstRetryWait
+
     Timer {
         id: tryAgain
-        interval: 5000
         onTriggered: helper.running = airpods.connected
     }
 
     onConnectedChanged: {
         tryAgain.stop()
+        retryWait = firstRetryWait
         helper.running = connected
     }
     Component.onCompleted: helper.running = connected
@@ -130,7 +139,7 @@ Scope {
 
     readonly property var output: Pipewire.defaultAudioSink
     PwObjectTracker {
-        objects: airpods.output !== null ? [airpods.output] : []
+        objects: [airpods.output, airpods.turnedDown].filter(node => node !== null)
     }
 
     // Only the AirPods' own sound is turned down; PipeWire names their
@@ -138,18 +147,28 @@ Scope {
     readonly property bool playingThroughThem: device !== null && output !== null
         && output.name.includes(device.address.replace(/:/g, "_"))
 
-    // The loudness before it was turned down; -1 while it isn't.
+    // The output that was turned down and its loudness before; null and -1
+    // while none is. The sound comes back on that output, not on whichever
+    // is the default by then: the AirPods may be gone, or no longer chosen.
+    property var turnedDown: null
     property real loudnessBefore: -1
+    property real loudnessWhileDown: -1
 
     function speaking(now) {
-        if (now && loudnessBefore < 0 && playingThroughThem && output.audio !== null) {
+        if (now && turnedDown === null && playingThroughThem && output.audio !== null) {
+            turnedDown = output
             loudnessBefore = output.audio.volume
-            output.audio.volume = loudnessBefore * (wishes.speaking_loudness ?? 0.2)
-        } else if (!now && loudnessBefore >= 0) {
-            if (output?.audio) {
-                output.audio.volume = loudnessBefore
+            loudnessWhileDown = loudnessBefore * (wishes.speaking_loudness ?? 0.2)
+            output.audio.volume = loudnessWhileDown
+        } else if (!now && turnedDown !== null) {
+            // Not if the wearer has set the loudness meanwhile.
+            const audio = turnedDown.audio
+            if (audio && Math.abs(audio.volume - loudnessWhileDown) < 0.005) {
+                audio.volume = loudnessBefore
             }
+            turnedDown = null
             loudnessBefore = -1
+            loudnessWhileDown = -1
         }
         if (now) {
             stillSpeaking.restart()
