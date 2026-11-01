@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Makes the files of a release of this repository, as Mavernix's App Store
+reads them (docs/app-store.md in Mavernix):
+
+    extensions.toml     the list: a table for each extension
+    NAME.tar.gz         each extension's folder, as NAME/
+    NAME-icon.EXT       each extension's icon
+
+    packaging/make-release DIRECTORY    writes them into DIRECTORY
+
+An extension is every folder here that has an extension.toml. Its title,
+description (the store's summary), version and icon come from that file.
+"""
+
+import json
+import sys
+import tarfile
+import tomllib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+LEFT_OUT = {"__pycache__"}
+
+
+def extensions():
+    for manifest_file in sorted(ROOT.glob("*/extension.toml")):
+        yield manifest_file.parent, tomllib.loads(manifest_file.read_text())
+
+
+def pack(folder, destination):
+    with tarfile.open(destination, "w:gz") as archive:
+        archive.add(folder, arcname=folder.name,
+                    filter=lambda member: None if LEFT_OUT & set(Path(member.name).parts) else member)
+
+
+def main(arguments):
+    if len(arguments) != 1:
+        sys.exit(__doc__)
+    output = Path(arguments[0])
+    output.mkdir(parents=True, exist_ok=True)
+
+    index = []
+    for folder, manifest in extensions():
+        name = folder.name
+        for key in ("title", "description", "version", "icon"):
+            if not isinstance(manifest.get(key), str):
+                sys.exit(f"make-release: {name}/extension.toml needs a `{key}`.")
+        icon = folder / manifest["icon"]
+        icon_name = f"{name}-icon{icon.suffix}"
+        (output / icon_name).write_bytes(icon.read_bytes())
+        pack(folder, output / f"{name}.tar.gz")
+        index.append(f"[{name}]\n"
+                     f"title = {json.dumps(manifest['title'])}\n"
+                     f"summary = {json.dumps(manifest['description'])}\n"
+                     f"version = {json.dumps(manifest['version'])}\n"
+                     f"icon = {json.dumps(icon_name)}\n")
+    (output / "extensions.toml").write_text("\n".join(index))
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

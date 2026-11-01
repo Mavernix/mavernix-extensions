@@ -1,0 +1,21 @@
+# Pushing a version tag (v1.2.0) makes a release holding what the Mavernix
+# App Store reads (packaging/make-release).
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover tests
+      - run: python3 packaging/make-release dist
+      - run: gh release create "$GITHUB_REF_NAME" dist/* --title "$GITHUB_REF_NAME" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

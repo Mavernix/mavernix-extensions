@@ -7,6 +7,11 @@ protocol (docs/ there).
 
 import importlib.util
 import pathlib
+import subprocess
+import sys
+import tarfile
+import tempfile
+import tomllib
 import unittest
 
 HELPER = pathlib.Path(__file__).parent.parent / "airpods" / "airpods.py"
@@ -93,6 +98,20 @@ class Input(unittest.TestCase):
         lines, rest = airpods.split_lines(b"", b"mode tran")
         self.assertEqual((lines, rest), ([], b"mode tran"))
         self.assertEqual(airpods.split_lines(rest, b"sparency\n"), (["mode transparency"], b""))
+
+
+class Release(unittest.TestCase):
+    def test_what_the_store_reads_is_made(self):
+        script = pathlib.Path(__file__).parent.parent / "packaging" / "make-release"
+        with tempfile.TemporaryDirectory() as output:
+            subprocess.run([sys.executable, str(script), output], check=True)
+            entry = tomllib.loads((pathlib.Path(output) / "extensions.toml").read_text())["airpods"]
+            self.assertEqual(set(entry), {"title", "summary", "version", "icon"})
+            self.assertTrue((pathlib.Path(output) / entry["icon"]).is_file())
+            with tarfile.open(pathlib.Path(output) / "airpods.tar.gz") as archive:
+                names = archive.getnames()
+            self.assertIn("airpods/extension.toml", names)
+            self.assertFalse([name for name in names if "__pycache__" in name])
 
 
 if __name__ == "__main__":
