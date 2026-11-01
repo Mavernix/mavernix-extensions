@@ -45,7 +45,7 @@ class Release(unittest.TestCase):
             subprocess.run([sys.executable, str(ROOT / "packaging" / "make-release"), output], check=True)
             entry = tomllib.loads((pathlib.Path(output) / "extensions.toml").read_text())["now-playing"]
             self.assertEqual(entry["title"], "Now Playing")
-            self.assertEqual(entry["version"], "0.1.0")
+            self.assertEqual(entry["version"], "0.1.1")
             self.assertEqual(entry["icon"], "now-playing-icon.svg")
             self.assertTrue((pathlib.Path(output) / entry["icon"]).is_file())
             with tarfile.open(pathlib.Path(output) / "now-playing.tar.gz") as archive:
