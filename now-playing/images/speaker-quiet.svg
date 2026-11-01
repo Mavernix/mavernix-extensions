@@ -1,0 +1,5 @@
+<!-- A speaker without sound waves: the quiet end of the volume slider.
+     Drawn for Mavernix in one colour. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <path d="M4 12 L10 12 L18 5 L18 27 L10 20 L4 20 Z" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

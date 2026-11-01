@@ -1,0 +1,6 @@
+<!-- Play: a triangle pointing right, its corners a little rounded. Shown in
+     the panel when no icon theme has media-playback-start, and as the
+     play button. Drawn for Mavernix in one colour. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <path d="M7.5 4.5 L27 16 L7.5 27.5 Z" stroke="#000" stroke-width="2" stroke-linejoin="round"/>
+</svg>

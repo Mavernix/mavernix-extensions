@@ -1,0 +1,22 @@
+# What's playing, in the panel, the way macOS shows it: a play symbol while
+# a media player is around, and under it the album art, the track, how far
+# it has got and the buttons to go back, pause and skip. See README.md at
+# the top of this repository.
+
+title = "Now Playing"
+description = "What's playing, in the panel: the album art, the track, how far it has got, and buttons to pause or skip it."
+version = "0.1.0"
+icon = "images/now-playing.svg"
+
+background = "Background.qml"
+
+[panel_items]
+right = ["now-playing"]
+
+[settings]
+# Players whose bus name holds one of these are left out. playerctld only
+# repeats whichever player is active, which would then show up twice.
+ignored = ["playerctld"]
+
+[words]
+not_playing = "Not Playing"

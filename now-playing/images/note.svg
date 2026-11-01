@@ -1,0 +1,8 @@
+<!-- A pair of quavers, for a track without album art. Drawn for Mavernix
+     in one colour. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <path d="M11 7 L27 3.5 L27 22" fill="none" stroke="#000" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M11 7 L11 25.5" fill="none" stroke="#000" stroke-width="2.6"/>
+  <ellipse cx="7.6" cy="25.5" rx="4.4" ry="3.4"/>
+  <ellipse cx="23.6" cy="22" rx="4.4" ry="3.4"/>
+</svg>

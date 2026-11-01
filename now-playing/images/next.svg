@@ -1,0 +1,8 @@
+<!-- Forward: two triangles pointing right, touching. Drawn for Mavernix in
+     one colour. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g stroke="#000" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M3 8 L15.5 16 L3 24 Z"/>
+    <path d="M16 8 L28.5 16 L16 24 Z"/>
+  </g>
+</svg>

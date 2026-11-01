@@ -1,0 +1,63 @@
+# The Now Playing panel's sizes and timings, for every theme. Its box, font
+# and colours are the theme's menu's ([menu], [fonts].menu): the title in
+# text_color, the rest in disabled_text_color, the bars' grooves and the
+# empty art in separator_color. A theme with iTunes' pieces gets those
+# instead (see README.md); the lcd_ keys apply only then. A theme's own
+# file (looks/THEME.toml) can name other colours: text_color,
+# secondary_text_color, seek_track_color, seek_fill_color, placeholder_color.
+
+min_width = 340             # the panel grows with the title up to max_width,
+max_width = 400             # then the title is cut short
+padding = 12                # around the contents, inside the box
+row_gap = 8                 # between the player's name, the track and the buttons
+
+art_size = 60
+art_corner_radius = 2
+art_gap = 12                # between the art and the text
+line_gap = 2                # between the title, "artist – album" and the bar
+title_bold = true
+title_size_change = 0       # added to the menu font's size
+subtitle_size_change = -1
+time_size_change = -3
+text_align = "left"
+
+scrubber_height = 16        # the row with the times and the bar
+time_gap = 6                # between a time and the bar
+seek_height = 4             # the drawn bar
+seek_height_active = 6      # under the pointer, when the player can jump
+
+# The buttons: the theme's pictures at their own size, else these drawings.
+transport_height = 30
+glyph_size = 18             # back and forward
+play_glyph_size = 24
+glyph_spacing = 22
+disabled_glyph_opacity = 0.35
+transport_inset = 2         # from the left, when the volume slider is beside them
+
+# The player's own loudness, beside the buttons.
+volume_width = 96           # the slider, without its speakers
+volume_gap = 16             # at least this between the buttons and the slider
+volume_end_inset = 2
+speaker_size = 13
+speaker_gap = 5
+volume_line_height = 4      # the drawn slider
+volume_knob_size = 12
+volume_step = 0.05          # one wheel notch
+volume_send_ms = 50         # while dragging, at most one change sent to the player per this
+volume_settle_ms = 400      # after a change, how long the slider trusts itself over the player
+
+source_height = 18          # the line naming the player, when there are several
+source_size_change = -2
+source_arrow = "▾"
+
+# On the theme's LCD ([music.display]).
+lcd_inset = 7               # from its edge to the art
+lcd_text_inset = 7          # above and below the text
+lcd_text_end_inset = 12     # after the text
+lcd_scrubber_height = 18
+lcd_title_bold = false
+lcd_text_align = "center"   # as iTunes 11
+
+position_update_ms = 500    # how often the time moves on while it plays
+
+icon_name = "media-playback-start"   # the panel's symbol, by its icon name
