@@ -1,0 +1,15 @@
+# Show Input Source in the panel
+
+title = "Input Source Menu"
+description = "Show the current input source in the panel"
+version = "0.1.0"
+
+[panel_items]
+right = ["inputsource"]
+
+[words]
+# Custom labels for keyboard layouts displayed in the panel
+layout_map = [
+  ["English (US)", "US"],
+]
+show_keyboard_preferences = "Show Keyboard Preferences..."
