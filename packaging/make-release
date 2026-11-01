@@ -9,7 +9,8 @@ reads them (docs/app-store.md in Mavernix):
     packaging/make-release DIRECTORY    writes them into DIRECTORY
 
 An extension is every folder here that has an extension.toml. Its title,
-description (the store's summary), version and icon come from that file.
+description (the store's summary), version and icon come from that file, and
+its developer if it names one (the store shows the organisation otherwise).
 """
 
 import json
@@ -49,11 +50,13 @@ def main(arguments):
         icon_name = f"{name}-icon{icon.suffix}"
         (output / icon_name).write_bytes(icon.read_bytes())
         pack(folder, output / f"{name}.tar.gz")
+        developer = manifest.get("developer")
         index.append(f"[{name}]\n"
                      f"title = {json.dumps(manifest['title'])}\n"
                      f"summary = {json.dumps(manifest['description'])}\n"
                      f"version = {json.dumps(manifest['version'])}\n"
-                     f"icon = {json.dumps(icon_name)}\n")
+                     f"icon = {json.dumps(icon_name)}\n"
+                     + (f"developer = {json.dumps(developer)}\n" if isinstance(developer, str) else ""))
     (output / "extensions.toml").write_text("\n".join(index))
 
 
