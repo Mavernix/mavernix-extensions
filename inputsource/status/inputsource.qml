@@ -15,6 +15,7 @@ StatusItem {
     readonly property var extension: panel.extensions?.info("inputsource") ?? null
     readonly property var words: extension?.manifest.words ?? ({})
     readonly property bool connected: socket.connected
+    shown: possibleLayouts.length > 1
 
     property int layoutIndex: -1
     property var possibleLayouts: []
@@ -66,6 +67,10 @@ StatusItem {
     }
 
     function updateLayout(state) {
+        // A virtual keyboard (wtype, a VNC server) has no layouts of its own;
+        // its keys would otherwise hide the item.
+        if ((state["possible-layouts"] ?? []).length === 0)
+            return;
         possibleLayouts = state["possible-layouts"] ?? [];
         layoutIndex = state["layout-index"] ?? -1;
     }
@@ -151,12 +156,15 @@ StatusItem {
             property int depth: 0
             property bool inString: false
             property bool escaped: false
+            property string previous: ""
 
             onRead: chunk => {
                 for (const c of chunk) {
                     if (depth === 0) {
                         // Ignore Wayfire's binary header.
-                        if (c !== "{")
+                        const afterHeader = previous === "\u0000";
+                        previous = c;
+                        if (c !== "{" || !afterHeader)
                             continue;
 
                         pending = "{";

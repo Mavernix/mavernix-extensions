@@ -3,6 +3,8 @@
 title = "Input Source Menu"
 description = "Show the current input source in the panel"
 version = "0.1.0"
+icon = "images/icon.svg"
+developer = "mmmdhr"
 
 [panel_items]
 right = ["inputsource"]

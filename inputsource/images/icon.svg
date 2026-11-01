@@ -1,0 +1,38 @@
+<!-- The Input Source extension's picture in the App Store and the settings
+     window: a keyboard, in white on a glossy green tile, like the AirPods
+     and Now Playing ones. Drawn for Mavernix. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="base" x1="0" y1="32" x2="0" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7ee08a"/>
+      <stop offset="1" stop-color="#1f9a4a"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="32" x2="0" y2="262" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0.05"/>
+    </linearGradient>
+    <rect id="body" x="112" y="168" width="288" height="176" rx="28"/>
+    <!-- The keys, in the tile's colour, so they read as holes in the keyboard. -->
+    <g id="keys">
+      <rect x="136" y="192" width="40" height="40" rx="8"/>
+      <rect x="186" y="192" width="40" height="40" rx="8"/>
+      <rect x="236" y="192" width="40" height="40" rx="8"/>
+      <rect x="286" y="192" width="40" height="40" rx="8"/>
+      <rect x="336" y="192" width="40" height="40" rx="8"/>
+      <rect x="136" y="242" width="40" height="40" rx="8"/>
+      <rect x="186" y="242" width="40" height="40" rx="8"/>
+      <rect x="236" y="242" width="40" height="40" rx="8"/>
+      <rect x="286" y="242" width="40" height="40" rx="8"/>
+      <rect x="336" y="242" width="40" height="40" rx="8"/>
+      <rect x="176" y="292" width="160" height="28" rx="8"/>
+    </g>
+  </defs>
+
+  <rect x="32" y="44" width="448" height="448" rx="92" fill="#000" opacity="0.18"/>
+  <rect x="32" y="32" width="448" height="448" rx="92" fill="url(#base)"/>
+  <use href="#body" transform="translate(0 8)" fill="#000" opacity="0.25"/>
+  <use href="#body" fill="#fff"/>
+  <use href="#keys" fill="url(#base)"/>
+  <path d="M32 124 A92 92 0 0 1 124 32 H388 A92 92 0 0 1 480 124 V232 Q256 300 32 232 Z" fill="url(#gloss)"/>
+  <rect x="33.5" y="33.5" width="445" height="445" rx="90.5" fill="none" stroke="#fff" stroke-opacity="0.3" stroke-width="3"/>
+</svg>
