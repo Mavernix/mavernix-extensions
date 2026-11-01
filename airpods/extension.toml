@@ -3,7 +3,7 @@
 
 title = "AirPods"
 description = "The charge of your AirPods, their noise control and Conversation Awareness, in the panel."
-version = "0.1.0"
+version = "0.1.1"
 icon = "images/airpods.svg"
 
 background = "Background.qml"
